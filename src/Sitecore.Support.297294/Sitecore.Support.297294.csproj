@@ -87,7 +87,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Infrastructure\Sitecore\Controllers\ItemServiceContoller.cs" />
-    <Compile Include="Services\Infrastructure\Sitecore\Data\ItemSearch.cs" />
+    <Compile Include="Services\Infrastructure\Sitecore\Data\ItemSerach.cs" />
     <Compile Include="Services\Infrastructure\Sitecore\Handlers\SearchHandler.cs" />
     <Compile Include="Services\Infrastructure\Web\Http\DefaultRouteMapper.cs" />
   </ItemGroup>

@@ -15,18 +15,18 @@ using Sitecore.Services.Infrastructure.Sitecore.Services;
 
 namespace Sitecore.Support.Services.Infrastructure.Sitecore.Data
 {
-  public class ItemSearch : ItemDataBase, IItemSearch
+  public class ItemSerach : ItemDataBase, IItemSearch
   {
     private readonly IContentSearchManagerWrapper _contentSearchManagerWrapper;
 
     private readonly IQueryableOperations _queryableOperations;
 
-    public ItemSearch()
+    public ItemSerach()
         : this(new ContentSearchManagerWrapper(), new QueryableOperations())
     {
     }
 
-    public ItemSearch(IContentSearchManagerWrapper contentSearchManagerWrapper, IQueryableOperations queryableOperations)
+    public ItemSerach(IContentSearchManagerWrapper contentSearchManagerWrapper, IQueryableOperations queryableOperations)
     {
       Assert.ArgumentNotNull(contentSearchManagerWrapper, "_contentSearchManagerWrapper");
       Assert.ArgumentNotNull(queryableOperations, "_queryableOperations");
@@ -75,7 +75,7 @@ namespace Sitecore.Support.Services.Infrastructure.Sitecore.Data
           }
           
         }
-        if (ItemSearch.IsLanguageSpecificSearch(language))
+        if (ItemSerach.IsLanguageSpecificSearch(language))
         {
           string itemLanguage = ItemDataBase.GetLanguage(language).Name;
           source = this._queryableOperations.Where(source, (FullTextSearchResultItem x) => x.Language == itemLanguage);
@@ -92,7 +92,7 @@ namespace Sitecore.Support.Services.Infrastructure.Sitecore.Data
         return new ItemSearchResults
         {
           TotalCount = num,
-          NumberOfPages = ItemSearch.CalculateNumberOfPages(pageSize, num),
+          NumberOfPages = ItemSerach.CalculateNumberOfPages(pageSize, num),
           Items = items,
           Facets = this._queryableOperations.Facets(results)
         };
