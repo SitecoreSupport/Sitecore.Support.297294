@@ -50,7 +50,7 @@
       <HintPath>..\packages\SC.Sitecore.ContentSearch.Linq.9.0.2\lib\Sitecore.ContentSearch.Linq.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Sitecore.Kernel">
+    <Reference Include="Sitecore.Kernel, Version=11.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SC.Sitecore.Kernel.9.0.2\lib\Sitecore.Kernel.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -87,10 +87,9 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Infrastructure\Sitecore\Controllers\ItemServiceContoller.cs" />
-    <Compile Include="Services\Infrastructure\Sitecore\Data\ItemSerach.cs" />
+    <Compile Include="Services\Infrastructure\Sitecore\Data\ItemSearch.cs" />
     <Compile Include="Services\Infrastructure\Sitecore\Handlers\SearchHandler.cs" />
     <Compile Include="Services\Infrastructure\Web\Http\DefaultRouteMapper.cs" />
-    <Compile Include="Services\NamespaceHttpControllerSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Config\Include\zzz\Sitecore.Support.297294.config">
@@ -98,6 +97,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Services\packages.config" />
     <None Include="web.config" />
   </ItemGroup>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Sitecore.Configuration;
 using Sitecore.ContentSearch;
 using Sitecore.ContentSearch.Linq;
 using Sitecore.ContentSearch.SearchTypes;
@@ -56,14 +57,23 @@ namespace Sitecore.Support.Services.Infrastructure.Sitecore.Data
           });
         }
         IQueryable<FullTextSearchResultItem> source = this._queryableOperations.CreateQuery(context, list);
-        source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => x.Content);
-        source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => x.TemplateName);
-        source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => x.CreatedBy);
-        source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => x.Language);
+        if (Settings.GetBoolSetting("Sitecore.Services.Search.UseDefaultFacets", false))
+        {
+          source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => x.Content);
+          source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => x.TemplateName);
+          source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => x.CreatedBy);
+          source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => x.Language);
+        }
+
         if (!string.IsNullOrEmpty(facet))
         {
           string[] facetSegments = facet.Split('|');
           source = this._queryableOperations.Where(source, (FullTextSearchResultItem x) => ((SearchResultItem)x)[facetSegments.First()] == facetSegments.Last());
+          foreach (string facetSegment in facetSegments)
+          {
+            source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => facetSegment);
+          }
+          
         }
         if (ItemSearch.IsLanguageSpecificSearch(language))
         {
