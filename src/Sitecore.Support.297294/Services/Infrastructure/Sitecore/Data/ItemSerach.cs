@@ -15,18 +15,18 @@ using Sitecore.Services.Infrastructure.Sitecore.Services;
 
 namespace Sitecore.Support.Services.Infrastructure.Sitecore.Data
 {
-  public class ItemSerach : ItemDataBase, IItemSearch
+  public class ItemSearch : ItemDataBase, IItemSearch
   {
     private readonly IContentSearchManagerWrapper _contentSearchManagerWrapper;
 
     private readonly IQueryableOperations _queryableOperations;
 
-    public ItemSerach()
+    public ItemSearch()
         : this(new ContentSearchManagerWrapper(), new QueryableOperations())
     {
     }
 
-    public ItemSerach(IContentSearchManagerWrapper contentSearchManagerWrapper, IQueryableOperations queryableOperations)
+    public ItemSearch(IContentSearchManagerWrapper contentSearchManagerWrapper, IQueryableOperations queryableOperations)
     {
       Assert.ArgumentNotNull(contentSearchManagerWrapper, "_contentSearchManagerWrapper");
       Assert.ArgumentNotNull(queryableOperations, "_queryableOperations");
@@ -57,7 +57,7 @@ namespace Sitecore.Support.Services.Infrastructure.Sitecore.Data
           });
         }
         IQueryable<FullTextSearchResultItem> source = this._queryableOperations.CreateQuery(context, list);
-        if (Settings.GetBoolSetting("Sitecore.Services.Search.UseDefaultFacets", false))
+        if (Settings.GetBoolSetting("Sitecore.Support.Services.Search.UseDefaultFacets", false))
         {
           source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => x.Content);
           source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => x.TemplateName);
@@ -68,14 +68,17 @@ namespace Sitecore.Support.Services.Infrastructure.Sitecore.Data
         if (!string.IsNullOrEmpty(facet))
         {
           string[] facetSegments = facet.Split('|');
-          source = this._queryableOperations.Where(source, (FullTextSearchResultItem x) => ((SearchResultItem)x)[facetSegments.First()] == facetSegments.Last());
-          foreach (string facetSegment in facetSegments)
+          for (int i=0;i<facetSegments.Length;i++)
           {
-            source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => facetSegment);
+               source = this._queryableOperations.Where(source, (FullTextSearchResultItem x) => ((SearchResultItem)x)[facetSegments.First()] == facetSegments.Last());
+
+              source = this._queryableOperations.FacetOn(source, (FullTextSearchResultItem x) => ((SearchResultItem)x)[facetSegments.First()]);
+              Log.Audit(facetSegments[i], new object());
+              Log.Audit(source.ToString(), new object());
+
           }
-          
         }
-        if (ItemSerach.IsLanguageSpecificSearch(language))
+        if (ItemSearch.IsLanguageSpecificSearch(language))
         {
           string itemLanguage = ItemDataBase.GetLanguage(language).Name;
           source = this._queryableOperations.Where(source, (FullTextSearchResultItem x) => x.Language == itemLanguage);
@@ -89,12 +92,17 @@ namespace Sitecore.Support.Services.Infrastructure.Sitecore.Data
                         where i != null
                         select i).ToArray();
         int num = this._queryableOperations.HitsCount(results);
+        FacetResults finalFacets = new FacetResults(); 
+        if (Settings.GetBoolSetting("Sitecore.Support.Services.Search.AlwaysOutputFacets", false))
+        {
+          finalFacets = results.Facets;
+        }
         return new ItemSearchResults
         {
           TotalCount = num,
-          NumberOfPages = ItemSerach.CalculateNumberOfPages(pageSize, num),
+          NumberOfPages = ItemSearch.CalculateNumberOfPages(pageSize, num),
           Items = items,
-          Facets = this._queryableOperations.Facets(results)
+          Facets = finalFacets
         };
       }
     }

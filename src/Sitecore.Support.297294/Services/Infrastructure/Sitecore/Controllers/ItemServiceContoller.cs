@@ -24,7 +24,7 @@ using Sitecore.Services.Infrastructure.Web.Http.Filters;
 using Sitecore.Services.Infrastructure.Web.Http.ModelBinding;
 using Sitecore.Support.Services.Infrastructure.Sitecore.Data;
 using SearchHandler = Sitecore.Support.Services.Infrastructure.Sitecore.Handlers.SearchHandler;
-using ItemSerach = Sitecore.Support.Services.Infrastructure.Sitecore.Data.ItemSerach;
+using ItemSearch = Sitecore.Support.Services.Infrastructure.Sitecore.Data.ItemSearch;
 
 namespace Sitecore.Support.Services.Infrastructure.Sitecore.Controllers
 {
@@ -139,7 +139,7 @@ namespace Sitecore.Support.Services.Infrastructure.Sitecore.Controllers
         PageSize = pageSize,
         Facet = facet
       };
-      IItemRequestHandler handler = new SearchHandler(new ItemSerach());
+      IItemRequestHandler handler = new SearchHandler(new ItemSearch());
       IItemRequestHandler itemRequestHandler = handler;
       ItemSearchResults itemSearchResults = (ItemSearchResults)this.ProcessRequest(itemRequestHandler.Handle, query);
       IItemRequestHandler handler2 = this._handlerProvider.GetHandler<FormatItemSearchResultsHandler>();
