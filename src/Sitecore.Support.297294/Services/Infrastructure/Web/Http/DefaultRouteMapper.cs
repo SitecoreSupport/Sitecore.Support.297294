@@ -58,69 +58,59 @@ namespace Sitecore.Support.Services.Infrastructure.Web.Http
     {
       Assert.ArgumentNotNull(config, "config");
       List<IHttpRoute> routes = new List<IHttpRoute>();
-      routes.Add(config.Routes.MapHttpRoute("ItemService-QueryViaItem", this._routeBase + "item/{id}/query", new
+      config.Routes.MapHttpRoute("ItemService-QueryViaItem", this._routeBase + "item/{id}/query", new
       {
         controller = "ItemService",
         action = "QueryViaItem",
-        @namepsace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
-      }, new
-      {
-        id = "^(\\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\\}{0,1})$"
-      })
-        );
-      routes.Add(config.Routes.MapHttpRoute("ItemService-Search", this._routeBase + "item/search", new
-      {
-        controller = "ItemService",
-        action = "Search",
-        @namepsace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
-      }));
-      routes.Add(config.Routes.MapHttpRoute("ItemService-SearchViaItem", this._routeBase + "item/{id}/search", new
-      {
-        controller = "ItemService",
-        action = "SearchViaItem",
-        @namepsace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
-      }, new
-      {
-        id = "^(\\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\\}{0,1})$"
-      }));
-      routes.Add(config.Routes.MapHttpRoute("ItemService-Children", this._routeBase + "item/{id}/children", new
-      {
-        controller = "ItemService",
-        action = "GetChildren",
-        @namepsace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
-      }, new
-      {
-        id = "^(\\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\\}{0,1})$"
-      }));
-      config.Routes.MapHttpRoute("ItemService", this._routeBase + "item/{id}", new
-      {
-        controller = "ItemService",
-        action = "DefaultAction",
-        @namepsace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
+        @namespace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
       }, new
       {
         id = "^(\\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\\}{0,1})$"
       });
-      routes.Add(config.Routes.MapHttpRoute("ItemService-ContentPath", this._routeBase + "item", new
+      config.Routes.MapHttpRoute("ItemService-Search", this._routeBase + "item/search", new
+      {
+        controller = "ItemService",
+        action = "Search",
+        @namespace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
+      });
+      config.Routes.MapHttpRoute("ItemService-SearchViaItem", this._routeBase + "item/{id}/search", new
+      {
+        controller = "ItemService",
+        action = "SearchViaItem",
+        @namespace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
+      }, new
+      {
+        id = "^(\\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\\}{0,1})$"
+      });
+      config.Routes.MapHttpRoute("ItemService-Children", this._routeBase + "item/{id}/children", new
+      {
+        controller = "ItemService",
+        action = "GetChildren",
+        @namespace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
+      }, new
+      {
+        id = "^(\\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\\}{0,1})$"
+      });
+      config.Routes.MapHttpRoute("ItemService", this._routeBase + "item/{id}", new
+      {
+        controller = "ItemService",
+        action = "DefaultAction",
+        @namespace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
+      }, new
+      {
+        id = "^(\\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\\}{0,1})$"
+      });
+      config.Routes.MapHttpRoute("ItemService-ContentPath", this._routeBase + "item", new
       {
         controller = "ItemService",
         action = "GetItemByContentPath",
-        @namepsace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
-      }));
-      routes.Add(config.Routes.MapHttpRoute("ItemService-Path", this._routeBase + "item/{*path}", new
+        @namespace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
+      });
+      config.Routes.MapHttpRoute("ItemService-Path", this._routeBase + "item/{*path}", new
       {
         controller = "ItemService",
-        @namepsace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
-      }));
-      foreach (var httpRoute in routes)
-      {
-        if (httpRoute.Defaults["controller"].Equals("ItemService"))
-        {
-          httpRoute.Defaults.Add("namespace", "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers");
-          Log.Audit("added", new object());
-        }
-      }
-
+        @namespace = "Sitecore-Support-Services-Infrastructure-Sitecore-Controllers"
+      });
 
       config.Routes.MapHttpRoute("Authentication", this._routeBase + "auth/{action}", new
       {
